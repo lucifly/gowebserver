@@ -6,12 +6,21 @@ import (
 	"net/http"
 	"os"
 	"log"
+	"flag"
+	"strconv"
 	"webserverRaspberry/config"
 	//使用go mode 路径必须用当前项目名开头
 	"webserverRaspberry/routers"
 
 	"github.com/gin-gonic/gin"
 )
+
+func usage() {
+	log.Println("version: 1.0.0")
+	log.Println("Usage: app [-hpb]")
+	log.Println("Options:")
+	flag.PrintDefaults()
+}
 
 func main() {
 
@@ -21,9 +30,27 @@ func main() {
     //下面使用的是相对路径，config.json文件和main.go文件处于同一目录下
 	JsonParse.Load("./config/config.json", &v)
 	
-	webListenPort := v.ListenPort
+    // 定义几个变量，用于接收命令行的参数值
+    var webListenPort string
+	var heartBeat    int
+	var h bool
+	// &user 就是接收命令行中输入 -u 后面的参数值，其他同理
+	
+	flag.BoolVar(&h, "h", false, "help")
+    flag.StringVar(&webListenPort, "p", v.ListenPort, "web监听的端口，默认为:"+ v.ListenPort)
+    flag.IntVar(&heartBeat, "b", 0, "心跳包频率 /ms，默认为空，不发送心跳包")
+    // 解析命令行参数写入注册的flag里
+    flag.Parse()
 
-    log.Println( "web listen at: " + webListenPort)
+	flag.Usage = usage
+
+	if h {
+		flag.Usage()
+		return
+	}
+
+	log.Println( "web listen at: " + webListenPort)
+	log.Println( "heartBeat every [" + strconv.Itoa(heartBeat) + "] ms")
 
 	// 创建记录日志的文件
 	f, _ := os.Create("gin.log")

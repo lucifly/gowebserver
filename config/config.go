@@ -4,7 +4,7 @@ import (
     "io/ioutil"
     "encoding/json"
 	// "fmt"
-	"log"
+    "log"
 )
 //定义配置文件解析后的结构
 type Config struct {
