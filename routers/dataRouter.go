@@ -67,8 +67,8 @@ func WebData(context *gin.Context) {
 
 }
 
-func checkError(e error) {
-	if e != nil {
-		log.Fatal(e)
-	}
-}
+// func checkError(e error) {
+// 	if e != nil {
+// 		log.Fatal(e)
+// 	}
+// }

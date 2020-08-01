@@ -78,6 +78,14 @@ func main() {
 
 		// ...
 	}
+	process := r.Group("/process")
+	{
+		process.GET("/deploy", routers.DeployProcess) // 新增 process
+		process.GET("/delet", routers.DeletProcess) // 删除 process
+		process.GET("/start", routers.StartProcess) // 开始 process
+		process.GET("/stop", routers.StopProcess) // 结束 process
+		process.GET("/status", routers.StatusProcess) // 获取各个process的状态
+	}
 
 	r.Run(":"+webListenPort) // listen and serve on 0.0.0.0:8080
 }
