@@ -6,19 +6,23 @@ import (
     "log"
 )
 
-type ProcessTableEle struct {
-	ProcessID string
-	Nexthop []NextHop
-	Info string
-	Status string
-	Csign chan int
+type ProcessTableEle struct { // 记录每一项process
+	ProcessID string // process ID
+	Nexthop []NextHop // 输出发送给下一跳
+    Info string // process当前service所需的参数
+    Status string // 当前service在process的状态
+	Csign chan int // 用于对当前service发送 信号 的channel
 }
 
-type NextHop struct {
-	NextService string
-	NextPort string
-	OutPort string
+type NextHop struct { // 下一跳记录结构
+    NextService string // 下一跳的服务名
+    NextPort string // 下一跳服务接收的接口
+	OutPort string //当前服务的输出接口
 }
+
+// 声明processMap
+var processMap map[string]ProcessTableEle
+
 
 func getOneProcessTableEle() ProcessTableEle  {
 	nexthop_1 := NextHop{ NextService:"2", NextPort:"n1", OutPort:"o1" }
@@ -28,8 +32,6 @@ func getOneProcessTableEle() ProcessTableEle  {
 	return processEle
 }
 
-/* 声明变量，默认 map 是 nil */
-var processMap map[string]ProcessTableEle
 
 func init()  {
 	log.Println(">>>> process executor init <<<<")
