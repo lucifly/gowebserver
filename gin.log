@@ -15,6 +15,5 @@
 [GIN-debug] GET    /process/stop             --> webserverRaspberry/routers.StopProcess (3 handlers)
 [GIN-debug] GET    /process/status           --> webserverRaspberry/routers.StatusProcess (3 handlers)
 [GIN-debug] Listening and serving HTTP on :6082
-[GIN] 2020/08/01 - 23:16:45 | 200 |     118.817µs |     47.98.169.4 | GET      "/process/start?tem=1"
-[GIN] 2020/08/01 - 23:16:50 | 200 |      91.035µs |     47.98.169.4 | GET      "/process/start?tem=1"
-[GIN] 2020/08/01 - 23:16:55 | 200 |      91.605µs |     47.98.169.4 | GET      "/process/start?tem=2341"
+[GIN] 2020/08/04 - 23:54:36 | 200 |      307.89µs |     47.98.169.4 | GET      "/process/start?processid=p1&intav=10&maxcount=4"
+[GIN] 2020/08/04 - 23:54:48 | 200 |     365.437µs |     47.98.169.4 | GET      "/process/stop?processid=p1"

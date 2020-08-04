@@ -1,4 +1,6 @@
 {
+    "servicename":"47.98.169.4:6082",
+    "dataAPI":"/data/getdata",
     "wsPort": "7082",
     "listenPort": "6082"
 }

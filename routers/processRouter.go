@@ -3,15 +3,14 @@ package routers
 import (
 	// "fmt"
 	"log"
-	// "time"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	// "program/com.ypc/helloGin/model"
+
+	"webserverRaspberry/processexe"
+
 )
-
-
-
-
 
 // // RaspData 记录从树莓派传过来的数据
 // type RaspData struct {
@@ -43,7 +42,7 @@ func init() {
 func DeployProcess(context *gin.Context) {
 	// println(">>>> get DeployProcess <<<<")
 
-	 log.Println( context.Request.URL.Query().Get("tem") )
+	log.Println( context.Request.URL.Query().Get("tem") )
 
 	context.JSON(200, gin.H{
 		"result": "ok",
@@ -62,10 +61,16 @@ func DeletProcess(context *gin.Context) {
 
 }
 
+// 开始执行某 process;  
+// processid=process ID, intav=间隔时间，maxcount=执行次数
 func StartProcess(context *gin.Context) {
 	// println(">>>> get data from raspberry <<<<")
+	// log.Println( context.Request.URL.Query().Get("tem") )
+	processid := context.Request.URL.Query().Get("processid")
+	intav, _ :=  strconv.Atoi(context.Request.URL.Query().Get("intav"))
+	maxcount, _ :=  strconv.Atoi(context.Request.URL.Query().Get("maxcount"))
 
-	 log.Println( context.Request.URL.Query().Get("tem") )
+	processexe.StartProcess(processid, intav, maxcount)
 
 	context.JSON(200, gin.H{
 		"result": "ok",
@@ -73,10 +78,13 @@ func StartProcess(context *gin.Context) {
 
 }
 
+// 提前结束某 process;  
+// processid=process ID
 func StopProcess(context *gin.Context) {
 	// println(">>>> get data from raspberry <<<<")
-
-	 log.Println( context.Request.URL.Query().Get("tem") )
+	processid := context.Request.URL.Query().Get("processid")
+	// log.Println( context.Request.URL.Query().Get("tem") )
+	processexe.StopProcess(processid)
 
 	context.JSON(200, gin.H{
 		"result": "ok",
@@ -87,7 +95,7 @@ func StopProcess(context *gin.Context) {
 func StatusProcess(context *gin.Context) {
 	// println(">>>> get data from raspberry <<<<")
 
-	 log.Println( context.Request.URL.Query().Get("tem") )
+	log.Println( context.Request.URL.Query().Get("tem") )
 
 	context.JSON(200, gin.H{
 		"result": "ok",

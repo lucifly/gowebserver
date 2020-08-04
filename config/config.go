@@ -10,6 +10,8 @@ import (
 type Config struct {
     ListenPort  string `json:"listenPort"`
     WsPort string `json:"wsPort,omitempty"`
+    Servicename string `json:"servicename,omitempty"`
+    DataAPI string `json:"dataAPI,omitempty"`
 }
 // 给结构体的每个字段打上一个标签，标签冒号前是类型，后面是标签名
 // tag里面加上omitempy，可以在序列化的时候忽略0值或者空值

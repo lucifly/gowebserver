@@ -24,7 +24,7 @@ func usage() {
 
 func main() {
 
-
+	// 读取config.json
 	JsonParse := config.NewJsonStruct()
     v := config.Config{}
     //下面使用的是相对路径，config.json文件和main.go文件处于同一目录下
@@ -78,13 +78,13 @@ func main() {
 
 		// ...
 	}
-	process := r.Group("/process")
+	processcontrol := r.Group("/processcontrol")
 	{
-		process.GET("/deploy", routers.DeployProcess) // 新增 process
-		process.GET("/delet", routers.DeletProcess) // 删除 process
-		process.GET("/start", routers.StartProcess) // 开始 process
-		process.GET("/stop", routers.StopProcess) // 结束 process
-		process.GET("/status", routers.StatusProcess) // 获取各个process的状态
+		processcontrol.GET("/deploy", routers.DeployProcess) // 新增 process
+		processcontrol.GET("/delet", routers.DeletProcess) // 删除 process
+		processcontrol.GET("/start", routers.StartProcess) // 开始 process
+		processcontrol.GET("/stop", routers.StopProcess) // 结束 process
+		processcontrol.GET("/status", routers.StatusProcess) // 获取各个process的状态
 	}
 
 	r.Run(":"+webListenPort) // listen and serve on 0.0.0.0:8080
