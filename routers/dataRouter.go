@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	// "program/com.ypc/helloGin/model"
+	"webserverRaspberry/processexe"
 )
 
 // RaspData 记录从树莓派传过来的数据
@@ -66,6 +67,24 @@ func WebData(context *gin.Context) {
 	})
 
 }
+
+func ProcessData(context *gin.Context) {
+	println(">>>> Get process data <<<<")
+
+	// (DataCache).id = context.Query("id")
+	// (DataCache).tem = context.Request.URL.Query().Get("tem")
+	// (DataCache).hum = context.Request.URL.Query().Get("hum")
+	// (DataCache).shake = context.Request.URL.Query().Get("shake")
+	// (DataCache).time = time.Now().Format("2006-01-02 15:04:05")
+	processexe.Executeprocess( map[string]string { "o1":"wwww"  }  )
+	
+
+	context.JSON(200, gin.H{
+		"result": "ok",
+	})
+
+}
+
 
 // func checkError(e error) {
 // 	if e != nil {

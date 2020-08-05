@@ -9,11 +9,18 @@
 [GIN-debug] GET    /                         --> main.hello (3 handlers)
 [GIN-debug] GET    /data/rasdata             --> webserverRaspberry/routers.RasData (3 handlers)
 [GIN-debug] GET    /data/webdata             --> webserverRaspberry/routers.WebData (3 handlers)
+[GIN-debug] GET    /data/processdata         --> webserverRaspberry/routers.ProcessData (3 handlers)
 [GIN-debug] GET    /processcontrol/delet     --> webserverRaspberry/routers.DeletProcess (3 handlers)
 [GIN-debug] GET    /processcontrol/start     --> webserverRaspberry/routers.StartProcess (3 handlers)
 [GIN-debug] GET    /processcontrol/stop      --> webserverRaspberry/routers.StopProcess (3 handlers)
 [GIN-debug] GET    /processcontrol/status    --> webserverRaspberry/routers.StatusProcess (3 handlers)
 [GIN-debug] Listening and serving HTTP on :6082
-[GIN] 2020/08/05 - 19:07:29 | 200 |     360.188µs |     47.98.169.4 | GET      "/processcontrol/start?processid=p1&intav=5&maxcount=5"
-[GIN] 2020/08/05 - 19:07:42 | 200 |     644.726µs |     47.98.169.4 | GET      "/processcontrol/delet?processid=p1"
-[GIN] 2020/08/05 - 19:08:13 | 200 |     309.552µs |     47.98.169.4 | GET      "/processcontrol/start?processid=p1&intav=5&maxcount=5"
+[GIN] 2020/08/05 - 22:05:44 | 200 |     343.974µs |     47.98.169.4 | GET      "/processcontrol/start?processid=p1&intav=3&maxcount=10"
+[GIN] 2020/08/05 - 22:05:51 | 200 |     601.516µs |     47.98.169.4 | GET      "/data/processdata?ss=2"
+[GIN] 2020/08/05 - 22:06:23 | 200 |     328.753µs |     47.98.169.4 | GET      "/processcontrol/start?processid=p1&intav=3&maxcount=10"
+[GIN] 2020/08/05 - 22:06:28 | 200 |     477.067µs |     47.98.169.4 | GET      "/data/processdata?ss=2"
+[GIN] 2020/08/05 - 22:06:39 | 200 |     506.174µs |     47.98.169.4 | GET      "/processcontrol/stop?processid=p1"
+[GIN] 2020/08/05 - 22:06:45 | 200 |      528.41µs |     47.98.169.4 | GET      "/data/processdata?ss=2"
+[GIN] 2020/08/05 - 22:07:12 | 200 |     309.018µs |     47.98.169.4 | GET      "/processcontrol/start?processid=p1&intav=3&maxcount=10"
+[GIN] 2020/08/05 - 22:07:22 | 200 |     622.405µs |     47.98.169.4 | GET      "/processcontrol/delet?processid=p1"
+[GIN] 2020/08/05 - 22:07:27 | 200 |     454.024µs |     47.98.169.4 | GET      "/data/processdata?ss=2"

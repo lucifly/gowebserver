@@ -15,14 +15,19 @@ type ProcessTableEle struct { // 记录每一项process
 }
 
 type NextHop struct { // 下一跳记录结构
-    NextService string // 下一跳的服务名
-    NextPort string // 下一跳服务接收的接口
-	OutPort string //当前服务的输出接口
+	NextService string // 下一跳的服务名
+	OutPort_NextPort map[string]string // 输出与发给下一跳的接口的键值对
+	// "outport":"nextport"
+    // NextPort string // 下一跳服务接收的接口
+	// OutPort string //当前服务的输出接口
 }
 
-// 声明processMap
 type ProcessMap map[string]ProcessTableEle
 
+// 声明processMap
+var processMap_ptr *ProcessMap
+
+// 生成缺省的processMap 用于调试
 func NewDefaultProcessMap() *ProcessMap  {
 	t_process := make(ProcessMap)
 
@@ -35,6 +40,7 @@ func NewDefaultProcessMap() *ProcessMap  {
 
 }
 
+// 根据process id获取 当前process
 func (this *ProcessMap)  getProcessEleByID(processid string) (ProcessTableEle, bool)  {
 	tprocess,ok := (*this) [ processid ]
 	if (ok) {
@@ -44,6 +50,7 @@ func (this *ProcessMap)  getProcessEleByID(processid string) (ProcessTableEle, b
 	}
 }
 
+// 编辑指定process id 的process
 func (this *ProcessMap)  editProcessEleByID(processid string, new_process ProcessTableEle) (bool)  {
 	_,ok := (*this) [ processid ]
 	if (ok) {
@@ -54,6 +61,7 @@ func (this *ProcessMap)  editProcessEleByID(processid string, new_process Proces
 	}
 }
 
+// 根据process id 删除process
 func (this *ProcessMap)  delProcessEleByID(processid string) (bool)  {
 	_,ok := (*this) [ processid ]
 	if (ok) {
@@ -64,15 +72,27 @@ func (this *ProcessMap)  delProcessEleByID(processid string) (bool)  {
 	}
 }
 
+// 获取所有的process id
+func (this *ProcessMap) getAllkeys() []string  {
+
+	keys := make([]string, len((*this)), len((*this)))
+	k := 0
+	for key, _ := range (*this) {
+		keys[k] = key
+		k++
+	} 
+
+	return keys
+}
+
 func getOneProcessTableEle() ProcessTableEle  {
-	nexthop_1 := NextHop{ NextService:"2", NextPort:"n1", OutPort:"o1" }
+	nexthop_1 := NextHop{ NextService:"2", OutPort_NextPort:map[string]string{"o1":"n1", "o2":"n2"} }
 	nethop_array := [] NextHop { nexthop_1, } 
 	// bufCh := make(chan int, 1)
 	processEle := ProcessTableEle{ ProcessID:"p1", Nexthop:nethop_array, Info:"info1", Csign:nil } 
 	return processEle
 }
 
-var processMap_ptr *ProcessMap
 
 func init()  {
 	log.Println(">>>> process executor init <<<<")
@@ -98,7 +118,7 @@ func StartProcess(processid string, intav int, maxcount int) int {
 		processMap_ptr.editProcessEleByID(ing_Process.ProcessID,ing_Process)
 		// 注意，map元素是无法取址的，不可以直接用map["key"].value = newvalue来直接修改
 		// 需要再写回map
-		go executionservice(intav , maxcount , ing_Process ) 
+		go startservice(intav , maxcount , ing_Process ) 
 		return 0
     } else {
 		log.Printf("process %s not exist", processid)
@@ -161,7 +181,7 @@ func DelProcess(processid string) int {
     }
 }
 
-func executionservice(intav int, maxcount int, process_now ProcessTableEle) int {
+func startservice(intav int, maxcount int, process_now ProcessTableEle) int {
 	log.Printf( "process start, execute every %d s, for %d times", intav, maxcount )
 	for i := 0; i < maxcount; i++ {
 		timeout := time.NewTimer(time.Second * time.Duration(intav) )

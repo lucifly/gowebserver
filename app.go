@@ -74,6 +74,8 @@ func main() {
 	{
 		data.GET("/rasdata", routers.RasData)
 		data.GET("/webdata", routers.WebData)
+		data.GET("/processdata", routers.ProcessData)
+		
 		//可以自己添加其他，一个请求的路径对应一个函数
 
 		// ...
