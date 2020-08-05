@@ -21,8 +21,48 @@ type NextHop struct { // 下一跳记录结构
 }
 
 // 声明processMap
-var processMap map[string]ProcessTableEle
+type ProcessMap map[string]ProcessTableEle
 
+func NewDefaultProcessMap() *ProcessMap  {
+	t_process := make(ProcessMap)
+
+	var ing_Process ProcessTableEle
+	ing_Process = getOneProcessTableEle()
+
+	t_process[ing_Process.ProcessID] = ing_Process
+
+	return &t_process
+
+}
+
+func (this *ProcessMap)  getProcessEleByID(processid string) (ProcessTableEle, bool)  {
+	tprocess,ok := (*this) [ processid ]
+	if (ok) {
+		return tprocess,ok
+	} else {
+		return tprocess,ok
+	}
+}
+
+func (this *ProcessMap)  editProcessEleByID(processid string, new_process ProcessTableEle) (bool)  {
+	_,ok := (*this) [ processid ]
+	if (ok) {
+		(*this) [ processid ] = new_process
+		return true
+	} else {
+		return false
+	}
+}
+
+func (this *ProcessMap)  delProcessEleByID(processid string) (bool)  {
+	_,ok := (*this) [ processid ]
+	if (ok) {
+		delete(*this,processid)
+		return true
+	} else {
+		return false
+	}
+}
 
 func getOneProcessTableEle() ProcessTableEle  {
 	nexthop_1 := NextHop{ NextService:"2", NextPort:"n1", OutPort:"o1" }
@@ -32,16 +72,13 @@ func getOneProcessTableEle() ProcessTableEle  {
 	return processEle
 }
 
+var processMap_ptr *ProcessMap
 
 func init()  {
 	log.Println(">>>> process executor init <<<<")
 	/* 使用 make 函数 */
-	processMap = make(map[string]ProcessTableEle)
+	processMap_ptr = NewDefaultProcessMap()
 
-	var ing_Process ProcessTableEle
-	ing_Process = getOneProcessTableEle()
-
-	processMap[ing_Process.ProcessID] = ing_Process
 }
 
 // 开始执行业务流程
@@ -52,13 +89,13 @@ func init()  {
 */
 func StartProcess(processid string, intav int, maxcount int) int {
     /*查看元素在集合中是否存在 */
-    ing_Process, ok := processMap [ processid ] /*如果确定是真实的,则存在,否则不存在 */
+    ing_Process, ok := processMap_ptr.getProcessEleByID(processid) /*如果确定是真实的,则存在,否则不存在 */
     if (ok) {
 		log.Printf("ready to execute %s ", processid)
 		ch := make(chan int, 1)
 		ing_Process.Csign = ch
 		ing_Process.Status = "running"
-		processMap[ing_Process.ProcessID] = ing_Process 
+		processMap_ptr.editProcessEleByID(ing_Process.ProcessID,ing_Process)
 		// 注意，map元素是无法取址的，不可以直接用map["key"].value = newvalue来直接修改
 		// 需要再写回map
 		go executionservice(intav , maxcount , ing_Process ) 
@@ -77,13 +114,46 @@ func StartProcess(processid string, intav int, maxcount int) int {
 */
 func StopProcess(processid string) int {
     /*查看元素在集合中是否存在 */
-    ing_Process, ok := processMap [ processid ] /*如果确定是真实的,则存在,否则不存在 */
+	ing_Process, ok := processMap_ptr.getProcessEleByID(processid) /*如果确定是真实的,则存在,否则不存在 */
     if (ok) {
 		log.Printf("status of %s is %s", processid, ing_Process.Status)
+		if (ing_Process.Status != "running") {
+			log.Printf("%s is not running", processid)
+			return -2
+		}
 		log.Printf("stop %s ", processid)
 		ing_Process.Status = "stop"
-		processMap[ing_Process.ProcessID] = ing_Process
+		processMap_ptr.editProcessEleByID(ing_Process.ProcessID,ing_Process)
 		ing_Process.Csign <- 5
+		return 0
+    } else {
+		log.Printf("process %s not exist", processid)
+		return -1
+    }
+}
+
+
+// 删除某业务流程
+/*
+* func StartProcess(processid int, intav int, maxcount int) int 
+* @param 业务流程ID, 执行时间间隔, 总执行次数
+* @return 执行结果，状态码
+*/
+func DelProcess(processid string) int {
+    /*查看元素在集合中是否存在 */
+	ing_Process, ok := processMap_ptr.getProcessEleByID(processid) /*如果确定是真实的,则存在,否则不存在 */
+    if (ok) {
+		log.Printf("status of %s is %s", processid, ing_Process.Status)
+		if (ing_Process.Status != "running") {
+			log.Printf("delet %s ", processid)
+			processMap_ptr.delProcessEleByID(ing_Process.ProcessID)
+			return 0
+		}
+		log.Printf("stop %s ", processid)
+		ing_Process.Status = "stop"
+		ing_Process.Csign <- 5
+		log.Printf("delete %s ", processid)
+		processMap_ptr.delProcessEleByID(ing_Process.ProcessID)
 		return 0
     } else {
 		log.Printf("process %s not exist", processid)
@@ -109,5 +179,7 @@ func executionservice(intav int, maxcount int, process_now ProcessTableEle) int 
 		}	
 	}
 	log.Println("timeout over timecount")
+	process_now.Status = "stop"
+	processMap_ptr.editProcessEleByID(process_now.ProcessID,process_now)
 	return 0	
 }

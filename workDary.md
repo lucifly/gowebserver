@@ -18,7 +18,7 @@ Tips, 增加配置项需要在config.go中同步增加struct Config中的项。
 
 # 2020-08-04
 ## 修改process处理的API接口为   
-    `/processcontrol/deploy` // 新增 process  
+   ~~`/processcontrol/deploy` // 新增 process~~  
     `/processcontrol/delet` // 删除 process  
     `/processcontrol/start` // 开始 process  
     `/processcontrol/stop` // 结束 process  
@@ -54,3 +54,12 @@ processMap = make(map[string]ProcessTableEle)
 // 注意，map元素是无法取址的，不可以直接用map["key"].value = newvalue来直接修改
 // 需要再写回map. map["key"] = temp; temp.value = newvalue; map["key"] = temp
 ```
+
+# 2020-08-05
+删除接口 ~~`/processcontrol/deploy`~~ 。  
+业务逻辑改为，  
+1. 在接收到 `/processcontrol/start` 命令的时候，会查询本地processTable，如果没有，查询远程业务流程数据库中的，如果也没有就报错。  
+2. 而新增的业务流程只存在远程业务流程数据库中。本地要用的时候才会去查询远程业务流程数据库。
+  
+
+完成剩余的 `/processcontrol/start`，`/processcontrol/stop`，`/processcontrol/delet` 接口

@@ -9,11 +9,11 @@
 [GIN-debug] GET    /                         --> main.hello (3 handlers)
 [GIN-debug] GET    /data/rasdata             --> webserverRaspberry/routers.RasData (3 handlers)
 [GIN-debug] GET    /data/webdata             --> webserverRaspberry/routers.WebData (3 handlers)
-[GIN-debug] GET    /process/deploy           --> webserverRaspberry/routers.DeployProcess (3 handlers)
-[GIN-debug] GET    /process/delet            --> webserverRaspberry/routers.DeletProcess (3 handlers)
-[GIN-debug] GET    /process/start            --> webserverRaspberry/routers.StartProcess (3 handlers)
-[GIN-debug] GET    /process/stop             --> webserverRaspberry/routers.StopProcess (3 handlers)
-[GIN-debug] GET    /process/status           --> webserverRaspberry/routers.StatusProcess (3 handlers)
+[GIN-debug] GET    /processcontrol/delet     --> webserverRaspberry/routers.DeletProcess (3 handlers)
+[GIN-debug] GET    /processcontrol/start     --> webserverRaspberry/routers.StartProcess (3 handlers)
+[GIN-debug] GET    /processcontrol/stop      --> webserverRaspberry/routers.StopProcess (3 handlers)
+[GIN-debug] GET    /processcontrol/status    --> webserverRaspberry/routers.StatusProcess (3 handlers)
 [GIN-debug] Listening and serving HTTP on :6082
-[GIN] 2020/08/04 - 23:54:36 | 200 |      307.89µs |     47.98.169.4 | GET      "/process/start?processid=p1&intav=10&maxcount=4"
-[GIN] 2020/08/04 - 23:54:48 | 200 |     365.437µs |     47.98.169.4 | GET      "/process/stop?processid=p1"
+[GIN] 2020/08/05 - 19:07:29 | 200 |     360.188µs |     47.98.169.4 | GET      "/processcontrol/start?processid=p1&intav=5&maxcount=5"
+[GIN] 2020/08/05 - 19:07:42 | 200 |     644.726µs |     47.98.169.4 | GET      "/processcontrol/delet?processid=p1"
+[GIN] 2020/08/05 - 19:08:13 | 200 |     309.552µs |     47.98.169.4 | GET      "/processcontrol/start?processid=p1&intav=5&maxcount=5"

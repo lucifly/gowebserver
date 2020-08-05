@@ -80,7 +80,7 @@ func main() {
 	}
 	processcontrol := r.Group("/processcontrol")
 	{
-		processcontrol.GET("/deploy", routers.DeployProcess) // 新增 process
+		// processcontrol.GET("/deploy", routers.DeployProcess) // 新增 process
 		processcontrol.GET("/delet", routers.DeletProcess) // 删除 process
 		processcontrol.GET("/start", routers.StartProcess) // 开始 process
 		processcontrol.GET("/stop", routers.StopProcess) // 结束 process

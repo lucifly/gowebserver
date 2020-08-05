@@ -42,8 +42,6 @@ func init() {
 func DeployProcess(context *gin.Context) {
 	// println(">>>> get DeployProcess <<<<")
 
-	log.Println( context.Request.URL.Query().Get("tem") )
-
 	context.JSON(200, gin.H{
 		"result": "ok",
 	})
@@ -53,7 +51,9 @@ func DeployProcess(context *gin.Context) {
 func DeletProcess(context *gin.Context) {
 	// println(">>>> get DeletProcess <<<<")
 
-	log.Println( context.Request.URL.Query().Get("tem") )
+	processid := context.Request.URL.Query().Get("processid")
+	// log.Println( context.Request.URL.Query().Get("processid") )
+	processexe.DelProcess(processid)
 
 	context.JSON(200, gin.H{
 		"result": "ok",
