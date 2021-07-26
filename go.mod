@@ -2,12 +2,7 @@ module webserverRaspberry
 
 go 1.13
 
-require (
-	github.com/gin-gonic/gin v1.6.3
-	github.com/gorilla/websocket v1.4.2
-	golang.org/x/net v0.0.0-20200602114024-627f9648deb9
-	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a // indirect
-)
+require github.com/gin-gonic/gin v1.7.0
 
 replace (
 	cloud.google.com/go => github.com/GoogleCloudPlatform/google-cloud-go v0.58.0
